@@ -1,0 +1,448 @@
+@import './variables.scss';
+
+.TopBar {
+  height: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $top_bar_bg;
+  color: $top_bar_color;
+  -webkit-app-region: drag;
+  padding: 10px 30px;
+  z-index: 99;
+  border-bottom: 2px solid $white_80;
+  .TopBar-left {
+    display: flex;
+    align-items: start-flex;
+    flex-grow: 2;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    -webkit-app-region: drag;
+    .TopBar-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      color: $top_bar_color;
+      cursor: pointer;
+      &:hover {
+        background: $black;
+        color: $white;
+      }
+      &:active {
+        background: $light_black;
+        color: $white;
+      }
+    }
+    .TopBar-menu-search {
+      color: $top_bar_color;
+      height: 30px;
+      flex-grow: 1;
+      margin: 0 20px;
+      --Input-minHeight: 10px;
+    }
+  }
+  .TopBar-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    -webkit-app-region: drag;
+    .TopBar-right-windows-control-btns-container {
+      display: flex;
+      align-items: center;
+    }
+    .TopBar-right-windows-control-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: $top_bar_color;
+      &:hover {
+        background: $light_grey;
+      }
+      &:active {
+        background: $light_black;
+      }
+    }
+  }
+  .TopBar-left-browser {
+    display: flex;
+    align-items: start-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    .TopBar-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      color: $top_bar_color;
+      cursor: pointer;
+      &:hover {
+        background: $black;
+        color: $white;
+      }
+      &:active {
+        background: $light_black;
+        color: $white;
+      }
+    }
+    .TopBar-menu-search {
+      color: $top_bar_color;
+      height: 30px;
+      margin: 0 20px;
+      --Input-minHeight: 10px;
+    }
+  }
+  .TopBar-right-browser {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    -webkit-app-region: drag;
+    .TopBar-right-windows-control-btns-container {
+      display: flex;
+      align-items: center;
+    }
+    .TopBar-right-windows-control-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: $top_bar_color;
+      &:hover {
+        background: $light_grey;
+      }
+      &:active {
+        background: $light_black;
+      }
+    }
+  }
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  height: 40px;
+  background: $light-color;
+  color: $top_bar_color;
+  border: 1px outset $black;
+  border-radius: 5px;
+  gap: 5px;
+  &:hover {
+    background: $dark_white;
+  }
+  &.error {
+    border: 2px outset $danger-color;
+  }
+  .Icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    .Icon {
+      width: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 30px;
+      font-size: 24px;
+    }
+    &.BIcon {
+      margin-left: 5px;
+    }
+    &.AIcon {
+      margin-right: 5px;
+    }
+  }
+  .input-dev {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .input {
+      height: 40px;
+      width: 100%;
+      margin: auto;
+      border: none;
+      outline: none;
+      background: none;
+      padding: 0 10px;
+      font-family: $main_font;
+      font-weight: 600;
+      font-size: 16px;
+      font-style: normal;
+      color: $light_black;
+      &:focus {
+        border-bottom: 3px dashed $success-color;
+      }
+    }
+  }
+}
+
+.NavBar {
+  display: flex;
+  align-items: center;
+  background-color: $dark_white; // Adjust the background color as needed
+  height: $side_bar_height;
+  width: $side_bar_width;
+  padding: 5px 30px;
+  .link-div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    .Group {
+      display: flex;
+      align-items: center;
+
+      &.home {
+        margin-right: 20px;
+      }
+      &.links {
+        gap: 5px;
+      }
+
+      .link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: $black;
+        padding: 10px 15px;
+        border-radius: 5px;
+        &:hover {
+          background-color: $light_grey;
+        }
+        &.active {
+          background-color: $dark_grey;
+          color: $white;
+        }
+        .navlink-container {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          .Icon-container {
+            margin-right: 5px;
+          }
+          .Icon {
+            font-size: 24px;
+          }
+          .navlink-title {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.setting-Modal {
+  background: $modal-fog;
+  .setting-Modal-Dialog {
+    box-shadow: 3px 3px 15px $info-color;
+    .setting-Modal-Content {
+      padding: 10px;
+      width: 25vw;
+      min-width: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .setting-content {
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 100%;
+        .setting-content-title {
+          width: 100%;
+          text-align: center;
+          font-size: 26px;
+          color: $black;
+          text-transform: uppercase;
+        }
+        .setting-content-list {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          flex-grow: 1;
+          width: 100%;
+          padding: 0px 10px;
+          .setting-content-user-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            gap: 30px;
+            .icon {
+              position: relative;
+              width: 60px;
+              height: 60px;
+              background: $light-color;
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              p {
+                position: relative;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 36px;
+                overflow: visible;
+                font-weight: 600;
+              }
+            }
+            .text {
+              display: flex;
+              flex-direction: column;
+              .name {
+                font-size: 24px;
+                font-weight: 600;
+              }
+              .email {
+                font-size: 12px;
+              }
+            }
+          }
+          .setting-content-list-container {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            a {
+              width: 100%;
+              color: $secondary-color;
+              text-transform: uppercase;
+              &.setting-content-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                i {
+                  font-size: 24px;
+                }
+              }
+              &:hover {
+                background: $overBackground;
+                color: $light_black;
+              }
+              &.deconect {
+                background: $danger-color;
+                color: $black;
+                &:hover {
+                  background: $danger-color-hover;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.Modal-filter {
+  background: $modal-fog;
+  .Modal-filter-Dialog {
+    box-shadow: 3px 3px 15px $green_olive;
+    .Modal-filter-Dialog-Content {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      padding: 10px;
+      width: 50vw;
+      min-width: 300px;
+      min-height: 30vh;
+      .Modal-filter-Dialog-Content-title {
+        width: 100%;
+        text-align: center;
+        font-size: 26px;
+        color: $black;
+        text-transform: uppercase;
+      }
+      .Modal-filter-Dialog-Content-btns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-grow: 1;
+        width: 100%;
+        .empty {
+          flex-grow: 2;
+        }
+        .button {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+}
+
+.Modal-pdf {
+  background: $modal-fog;
+  margin: 0;
+  padding: 0;
+  .Modal-pdf-Dialog {
+    margin: 0;
+    padding: 0;
+    box-shadow: 3px 3px 15px $green_olive;
+    border-radius: 15px;
+    .Modal-pdf-Dialog-Content {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      width: 50vw;
+      min-width: 300px;
+      min-height: 30vh;
+    }
+  }
+}
+
+.submit-quote-request {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+  div {
+    height: 200px;
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: $dark-color;
+  }
+}
+
+.Loader {
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $main_width;
+  height: $main_height;
+  background: #2f423d59;
+  position: fixed;
+  top: 0;
+  left: 0;
+}

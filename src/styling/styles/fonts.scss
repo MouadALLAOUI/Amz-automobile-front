@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Josefin';
+  src: url('../fonts/JosefinSans-VariableFont_wght.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inder';
+  src: url('../fonts/Inder-Regular.ttf') format('truetype');
+}
+
+$main_font: 'Josefin', 'Inder', sans-serif;

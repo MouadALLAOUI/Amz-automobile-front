@@ -1,0 +1,415 @@
+@import './variables.scss';
+@import './components.scss';
+
+.Login-Page {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: $main_width;
+  height: $main_height;
+  overflow: hidden;
+  // background: $main_bg;
+
+  .LoginBackgound {
+    position: fixed;
+    width: $main_width;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    transform: translateY(-12vh);
+  }
+
+  .overBackround {
+    position: relative;
+    width: $main_width;
+    height: $main_height;
+    background-color: $overBackground;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2vh;
+    z-index: 90;
+    .LoginLogo {
+      position: relative;
+      width: $logo_width;
+      height: $logo_height;
+      overflow: hidden;
+      border-radius: 1.5vh;
+      border: 0.5vw outset $black;
+      .Logo {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .LoginForm {
+      position: relative;
+      background: $white;
+      width: $logo_width;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-content: center;
+      padding: 3vh 2vw;
+      gap: 2.5vh;
+      border-radius: 1.5vh;
+      border: 0.25vw inset $black;
+      p {
+        font-family: $main_font;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 3vh;
+        line-height: 5vh;
+        color: $black;
+        margin: 0 2.5vh;
+      }
+
+      .loginSubmit {
+        padding: 0 2vw;
+        cursor: pointer;
+        width: 100%;
+        height: 6.5vh;
+        background: $black;
+        border-radius: 1.5vh;
+        border: none;
+        font-family: $main_font;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 2.5vh;
+        letter-spacing: 0.3vw;
+        color: $white;
+        text-align: center;
+        &:hover {
+          background-color: #141414;
+          box-shadow: 2px 2px 2px rgb(141, 99, 99);
+          transition-duration: 3s;
+          position: relative;
+          bottom: 5px;
+        }
+      }
+    }
+  }
+}
+
+.App-Conatiner {
+  display: flex;
+  width: $main_width;
+  height: $main_height;
+  flex-direction: column;
+  overflow: hidden;
+  .menu {
+    display: none;
+  }
+  .content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    overflow: hidden;
+  }
+  .content {
+    position: relative;
+    border-radius: 1vw;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    background: $white_80;
+  }
+}
+
+.Welcome {
+  min-height: 100%;
+  background-color: $dark_grey;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  .bienvenu-text {
+    width: 60%;
+    text-align: center;
+    color: $white;
+    font-size: 34px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 50px auto;
+  }
+  .bg-imgLogo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: $logo_width;
+    height: $logo_height;
+    margin: 0 auto;
+    .logoBienvenu {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.Rapport-views {
+  padding: 15px;
+  .option-rapport {
+    display: flex;
+    justify-content: center;
+    margin: 3.2vh 3vw;
+    .desc {
+      font-family: 'Inder';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.2vw;
+      line-height: 2vh;
+      color: $black;
+      margin: 1vh 0;
+      align-items: end;
+      .tasks-name {
+        color: $green_olive;
+        font-weight: 900;
+      }
+    }
+    &.table-tasks-rapport {
+      margin: 0vh 3vw;
+      height: 53vh;
+      border: 0.2vw solid $black;
+      border-radius: 5vh;
+      background: #ffe;
+    }
+  }
+}
+
+.Pdfs-views {
+  padding: 1vw;
+  .option-pdfs {
+    display: flex;
+    margin: 3.2vh 1vw;
+    .button-config {
+      font-size: 1.2vw;
+      flex-grow: 1;
+    }
+    .icons-group {
+      margin: 0vh 3vw;
+      display: flex;
+      gap: 0.5vw;
+      border: 0.2vw solid $black;
+      border-radius: 1vh;
+      background: #ffe;
+    }
+  }
+}
+
+.tasks-views {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 10px;
+  .option-tasks {
+    display: flex;
+    margin: 20px 10px;
+    .button-config {
+      flex-grow: 1;
+      .button-config-btn {
+        font-size: 16px;
+        background: $black;
+        color: $white;
+        width: 200px;
+        height: 100%;
+      }
+    }
+    .icons-group {
+      display: flex;
+      gap: 10px;
+      border: 2px solid $black;
+      border-radius: 5px;
+      background: #FFE;
+    }
+  }
+}
+
+.About-views {
+  min-height: 100%;
+  background-color: $dark_grey;
+  color: $white;
+  display: flex;
+  padding: 1vw;
+  gap: 1vw;
+  .about-part {
+    flex-grow: 1;
+    padding: 1vw;
+    width: calc(100% / 3 - 2vw);
+    &.about {
+      .about-Title {
+        font-size: 1.5vw;
+        text-align: justify;
+        font-weight: 900;
+        .about-Title-span {
+          font-weight: bold;
+          text-transform: uppercase;
+          &.highlight {
+            color: #3498db;
+          }
+          &.name {
+            color: #2ecc71;
+          }
+          &.date {
+            color: #e74c3c;
+          }
+        }
+      }
+      .about-paragraph {
+        margin-top: 5vh;
+        font-size: 1vw;
+        text-align: justify;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+        .about-paragraph-title {
+          font-size: 1.2vw;
+          font-weight: bold;
+        }
+        li {
+          color: $white;
+          font-weight: bold;
+        }
+      }
+    }
+    &.contact {
+      .contact-title {
+        font-size: 1.5vw;
+        text-align: justify;
+        font-weight: 900;
+      }
+      .contact-paragraph {
+        margin-top: 5vh;
+        font-size: 1vw;
+        text-align: justify;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+      }
+      .contact-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1vw;
+        background: #FFE;
+        padding: 1vw;
+        border-radius: 1vw;
+        .form-group {
+          margin-bottom: 2vh;
+          width: 100%;
+          label {
+            color: $black;
+          }
+        }
+      }
+    }
+    &.faq {
+      .about-Title {
+        font-size: 1.5vw;
+        text-align: justify;
+        font-weight: 900;
+        .about-Title-span {
+          font-weight: bold;
+          text-transform: uppercase;
+          &.highlight {
+            color: #3498db;
+          }
+          &.name {
+            color: #2ecc71;
+          }
+          &.date {
+            color: #e74c3c;
+          }
+        }
+      }
+      .accordion-group {
+        font-size: 1vw;
+        text-align: justify;
+        margin-top: 5vh;
+        .accordion-item {
+          .accordion-summary {
+            font-size: 1.3vw;
+          }
+          .first-letter {
+            font-weight: 900;
+            display: inline-flex;
+          }
+        }
+      }
+    }
+  }
+}
+
+.not-found-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: $light-color;
+  padding: 5%;
+  .not-found-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+    .text-section {
+      max-width: 50%;
+      h1 {
+        font-size: 3rem;
+        color: #212529;
+      }
+
+      h2 {
+        font-size: 2rem;
+        color: #212529;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #6c757d;
+        margin: 1rem 0;
+      }
+
+      .go-back-btn {
+        background-color: $danger-color;
+        color: $white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: darken($danger-color-hover, 10%);
+        }
+      }
+      .error-code {
+        font-size: 4rem;
+        color: #212529;
+        margin: 1rem 0 0;
+      }
+
+      .error-message {
+        font-size: 1.5rem;
+        color: #6c757d;
+      }
+    }
+
+    .image-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .not-found-image {
+        width: 500px;
+        height: auto;
+      }
+    }
+  }
+}
