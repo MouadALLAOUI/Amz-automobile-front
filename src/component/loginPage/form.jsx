@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import Input from '../input/input';
-import {Button} from '@mui/joy';
+import { Button } from '@mui/joy';
 
 function LoginForm({
   isErr = false,
-  setEmail = () => {},
-  setPassword = () => {},
-  handleSubmit = () => {},
+  email = '',
+  setEmail = () => { },
+  password = '',
+  setPassword = () => { },
+  handleSubmit = () => { },
 }) {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -14,6 +17,7 @@ function LoginForm({
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+  const [passwordInputType, setPasswordInputType] = useState('password');
   return (
     <form onSubmit={handleSubmit} className="LoginForm">
       <p>Se connecter</p>
@@ -21,6 +25,7 @@ function LoginForm({
         type="text"
         name="userName"
         id="userName"
+        value={email}
         isErr={isErr}
         placeholder="nom d’utilisateur"
         onChange={handleEmailChange}
@@ -28,13 +33,15 @@ function LoginForm({
       <Input
         IsAIco
         AIco="fa-solid fa-eye"
-        type="password"
+        type={passwordInputType}
         name="userPass"
         id="userPass"
+        value={password}
         isErr={isErr}
         placeholder="mot de passe"
         onChange={handlePasswordChange}
-        IsBIco
+        onAIcoClicked={() => setPasswordInputType(passwordInputType == 'password' ? 'text' : 'password')}
+      // IsBIco
       />
       <Button
         color="neutral"

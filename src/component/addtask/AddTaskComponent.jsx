@@ -11,13 +11,14 @@ import GET_ENV from '../../env/environnement';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../store/userSlice';
 import axios from 'axios';
+
 const AddTaskComponent = ({
-  setOpenLoader = () => {},
-  handleCancel = () => {},
+  setOpenLoader = () => { },
+  handleCancel = () => { },
   open = false,
-  setOpen = () => {},
-  setOpenError = () => {},
-  setError = () => {},
+  setOpen = () => { },
+  setOpenError = () => { },
+  setError = () => { },
 }) => {
   const [openWarning, setOpenWarning] = useState(false); // warning if trying to close the modal
   const currentUser = useSelector(userSelector); // return the current user info saved in the redux
@@ -78,6 +79,7 @@ const AddTaskComponent = ({
   };
   /* Task.jsx state */
   const [task, setTask] = useState({
+    id: '',
     title: '',
     description: '',
     assigned_to: null,
@@ -89,7 +91,7 @@ const AddTaskComponent = ({
    * return false if all client fields are filled
    */
   const canNextTask = () => {
-    if (task.title !== '' && task.assigned_to !== null) {
+    if (task.id !== '' && task.title !== '' && task.assigned_to !== null) {
       return true;
     } else {
       return false;
@@ -137,62 +139,64 @@ const AddTaskComponent = ({
         }
         break;
     }
-  }, [formSettings, client, automobile, task]);
+  }, [formSettings.activeStep, client, automobile, task]);
 
   /*
    * onAddTaskHanddler() function used to post to the server
    *
    */
-  const onSubmitForm = (client, automobile, task) => {
-    // open the loading page (a spining red circle)
-    setOpenLoader(true);
+  const onSubmitForm = async (e, client, automobile, task) => {
+    e.preventDefault();
+    try {
+      // open the loading page (a spining red circle)
+      setOpenLoader(true);
+      // the back-end api link
+      const url = `${GET_ENV().API_URL}/vehicules`;
+      // the body of the post request used to create data in database
+      // console.log(automobile.vehicule);
+      // console.log(automobile.model);
+      const body = {
+        client_name: `${client.nom.toUpperCase()}`,
+        client_email: client.email,
+        client_telephone: client.telephone,
+        vehicules_immatriculation: automobile.immatriculation,
+        vehicules_kilometrage: automobile.kilometrage,
+        makes_id: automobile.vehicule !== null ? automobile.vehicule[`id`] : null,
+        model_id: automobile.model !== null ? automobile.model[`id`] : null,
+        task_id: task.id,
+        task_title: task.title,
+        task_description: task.description,
+        assigned_to: task.assigned_to !== null ? task.assigned_to[`id`] : null,
+        created_by: currentUser.id, // the current user id
+      };
+      // the config of the post request
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      // the methode axios
+      // Make the async request with await
+      const response = await axios.post(url, body, config);
+      if (response.data.status === 'success') {
+        setOpenLoader(false);  // Hide loader on success
+        setOpen(false);        // Close the modal
+        setTask({ id: '', title: '', description: '', assigned_to: null });  // clear the form
+        setAutomobile({ immatriculation: '', kilometrage: '', vehicule: null, model: null });  // clear the form
+        setClient({ nom: '', email: '', telephone: '' });  // clear the form
+        setFormSettings({ ...formSettings, activeStep: 0 });  // clear the form
+      } else {
+        setOpenLoader(false);  // Hide loader if error occurs
+        setError(response.data.error); // set error to error message from server
+        setOpenError(true);    // Open the error modal
+      }
 
-    // the back-end api link
-    const url = `${GET_ENV().API_URL}/full_store`;
-
-    // the body of the post request used to create data in database
-    const body = {
-      created_by: currentUser.id, // the current user id
-      nom: `${client.nom.toUpperCase()}`,
-      email: client.email,
-      telephone: client.telephone,
-      immatriculation: automobile.immatriculation,
-      kilometrage: automobile.kilometrage,
-      vehicule: automobile.vehicule,
-      model: automobile.model,
-      title: task.title,
-      assigned_to: task.assigned_to,
-      description: task.description,
-    };
-
-    // the config of the post request
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    // the methode axios
-    axios
-      .post(url, body, config)
-      .then((response) => {
-        // if everything works fine we will get a success as response
-        // else we will get a error as response
-        if (response.data.status === 'success') {
-          // reset_add_task_form_variables(); // wil reset all the variables to avoid finding them in the next model
-          setOpenLoader(false); // close the loader page
-          setOpen(false); // close the modal
-        } else if (response.data.status === 'error') {
-          setOpenLoader(false); // close the loader page
-          setError(response.data.error); // set error to error message from server
-          setOpenError(true); // open the error notification
-        }
-      })
-      .catch((err) => {
-        // this work if there is no server running or the url is not valid (and some other reason)
-        setError(err.data.error); // set error to error message from server
-        setOpenError(true); // open the error notification
-      });
+    } catch {
+      // if there is an error, we will close the loading page and show an error message
+      setOpenLoader(false);
+      setOpenError(true);
+      setError('Une erreur est survenue lors de l\'envoi des données');
+    }
   };
 
   const steps = () => {
@@ -215,13 +219,7 @@ const AddTaskComponent = ({
     <Modal
       className="Modal-filter"
       open={open}
-      onClose={(_event, reason) => {
-        if (reason !== 'backdropClick') {
-          setOpen(false);
-        } else {
-          return;
-        }
-      }}
+      onClose={(_event, reason) => reason !== 'backdropClick' && setOpen(false)}
     >
       <ModalDialog className="Modal-filter-Dialog">
         <form className="Modal-filter-Dialog-Content">
@@ -273,11 +271,11 @@ const AddTaskComponent = ({
                 onClick={
                   formSettings.activeStep < formSettings.stepsList.length - 1
                     ? () =>
-                        setFormSettings({
-                          ...formSettings,
-                          activeStep: formSettings.activeStep + 1,
-                        })
-                    : onSubmitForm(client, automobile, task)
+                      setFormSettings({
+                        ...formSettings,
+                        activeStep: formSettings.activeStep + 1,
+                      })
+                    : (e) => onSubmitForm(e, client, automobile, task)
                 }
                 color={
                   formSettings.activeStep < formSettings.stepsList.length - 1

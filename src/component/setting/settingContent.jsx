@@ -7,14 +7,15 @@ export default function SettingContent({
   onDecconect = () => {},
 }) {
   const user = useSelector(userSelector);
+  // console.log(user);
   return (
     <div className="setting-content">
       <h3 className="setting-content-title">Settings</h3>
       <div className="setting-content-list">
         <div className="setting-content-user-div">
-          <div className="icon"><p>{user.nom[0]}</p></div>
+          <div className="icon"><p>{user.name[0]}</p></div>
           <div className="text">
-            <p className="name">{user.nom} {user.prenom}</p>
+            <p className="name">{user.name}</p>
             <p className="email">{user.email}</p>
           </div>
         </div>

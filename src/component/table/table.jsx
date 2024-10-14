@@ -31,12 +31,14 @@ function My_Table({
   rowsPerPage = 5,
   isCheckBox = true,
   isAction = true,
-  setOrder = () => {},
-  setOrderBy = () => {},
-  setSelected = () => {},
-  setPage = () => {},
-  setRowsPerPage = () => {},
-  hanndleFilter = () => {},
+  setOrder = () => { },
+  setOrderBy = () => { },
+  setSelected = () => { },
+  setPage = () => { },
+  setRowsPerPage = () => { },
+  hanndleFilter = () => { },
+  onDeleteClick = () => { },
+  onEditClick = () => { },
 }) {
   const PageNumberLabel = () => {
     const to = () =>
@@ -46,9 +48,8 @@ function My_Table({
     const from = () => (rows.length === 0 ? 0 : page * rowsPerPage + 1);
     const count = () => (rows.length === -1 ? -1 : rows.length);
 
-    return `${
-      count() !== -1 ? count() : `more than ${to()}`
-    } of ${to()}–${from()}`;
+    return `${count() !== -1 ? count() : `more than ${to()}`
+      } of ${to()}–${from()}`;
   };
 
   const descendingComparator = (a, b, orderBy) => {
@@ -86,7 +87,12 @@ function My_Table({
       <thead>
         <tr>
           {isCheckBox && (
-            <th style={{ width: 45 }}>
+            <th
+              style={{
+                width: 45,
+                zIndex: 1001,
+                textAlign: 'center',
+              }}>
               <Checkbox
                 indeterminate={numSelected > 0 && numSelected < rowCount}
                 checked={rowCount > 0 && numSelected === rowCount}
@@ -104,8 +110,8 @@ function My_Table({
             return (
               <th
                 style={{
-                  width: headCell.id == 'id' && 45,
-                  zIndex: headCell.id == 'id' && 1000,
+                  width: headCell.id == 'id' ? 45 : undefined,
+                  zIndex: isCheckBox !== true && headCell.id == 'id' ? 1000 : undefined,
                   textAlign: 'center',
                 }}
                 key={headCell.id}
@@ -259,9 +265,7 @@ function My_Table({
           {stableSort(rows, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
-              const isItemSelected = isCheckBox
-                ? isSelected(row[`${headCells[0].id}`])
-                : () => {};
+              const isItemSelected = isCheckBox && isSelected(row[`${headCells[0].id}`]);
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
@@ -273,44 +277,41 @@ function My_Table({
                   style={
                     isItemSelected
                       ? {
-                          '--TableCell-dataBackground':
-                            'var(--TableCell-selectedBackground)',
-                          '--TableCell-headBackground':
-                            'var(--TableCell-selectedBackground)',
-                        }
+                        '--TableCell-dataBackground':
+                          'var(--TableCell-selectedBackground)',
+                        '--TableCell-headBackground':
+                          'var(--TableCell-selectedBackground)',
+                      }
                       : {}
                   }
                 >
                   {isCheckBox && (
-                    <th
+                    <td
                       scope="row"
-                      onClick={(event) =>
-                        isCheckBox
-                          ? handleClick(event, row[`${headCells[0].id}`])
-                          : () => {}
-                      }
+                      style={{
+                        textAlign: 'center',
+                        background: '#FFE',
+                      }}
+                      onClick={(event) => isCheckBox && handleClick(event, row[`${headCells[0].id}`])}
+                      className="cell"
                     >
                       <Checkbox
                         checked={isItemSelected}
                         slotProps={{ input: { 'aria-labelledby': labelId } }}
                         sx={{ verticalAlign: 'top' }}
                       />
-                    </th>
+                    </td>
                   )}
                   {Object.entries(row).map(([key, value]) => (
                     <td
                       id={labelId}
                       style={{
-                        textAlign: key == 'id' && 'center',
-                        background: key == 'id' && '#FFE',
+                        textAlign: isCheckBox !== true && key === 'id' ? 'center' : undefined,
+                        background: isCheckBox !== true && key === 'id' ? '#FFE' : undefined,
                       }}
                       scope="row"
                       key={key}
-                      onClick={(event) =>
-                        isCheckBox
-                          ? handleClick(event, row[`${headCells[0].id}`])
-                          : () => {}
-                      }
+                      onClick={(event) => isCheckBox && handleClick(event, row[`${headCells[0].id}`])}
                       className="cell"
                     >
                       {value}
@@ -328,10 +329,15 @@ function My_Table({
                           justifyContent: 'center',
                         }}
                       >
-                        <Button size="sm" variant="soft" color="warning">
+                        <Button size="sm" variant="soft" color="warning" onClick={() => onEditClick(row.id, row.task_status)}>
                           Edit
                         </Button>
-                        <Button size="sm" variant="solid" color="danger">
+                        <Button
+                          size="sm"
+                          variant="solid"
+                          color="danger"
+                          onClick={() => onDeleteClick(row.id)}
+                        >
                           Delete
                         </Button>
                       </Box>

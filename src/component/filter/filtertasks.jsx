@@ -31,18 +31,24 @@ export default function TaskFilterComponent({
 
   // filter tasks by
   const [options, setOptions] = useState([]); // options shown in the filter by select
-  const [filtrerPar, setFiltrerPar] = useState(isUser ? 'NOM' : 'DATE'); // value of the filter by select
+  const [filtrerPar, setFiltrerPar] = useState(isUser ? 'NOM' : 'nom Client'); // value of the filter by select
   // useState used to change filter by option if the filter is for user of else
   useEffect(() => {
     if (isUser) {
       setOptions(['DATE', 'NOM', 'PRENOM', 'EMAIL', 'ROLE', 'STATUS']);
     } else {
       setOptions([
-        'DATE',
-        'PEREMPTION',
-        'CATEGORIE',
-        'DESIGNATION',
-        'QUANTITE',
+        'nom Client',
+        'task id',
+        'task title',
+        'task status',
+        'vehicules immatriculation',
+        'vehicules kilometrage',
+        'assigned to',
+        'created by',
+        'created at',
+        'model',
+        'makes',
       ]);
     }
   }, []);
@@ -63,12 +69,19 @@ export default function TaskFilterComponent({
 
   // useState to manage the change in filter tasks by select and show option in filter type select according to filter by
   useEffect(() => {
-    if (filtrerPar === 'DATE' || filtrerPar === 'PEREMPTION') {
+    if (filtrerPar === 'DATE' || filtrerPar === 'PEREMPTION' || filtrerPar === 'created at') {
       setOptionsType(['DATE EGALE A', 'DATE SUPERIEUR A', 'DATE INFERIEUR A']);
       setFilterType('DATE EGALE A');
     } else if (
-      filtrerPar === 'CATEGORIE' ||
-      filtrerPar === 'DESIGNATION' ||
+      filtrerPar === 'nom Client' ||
+      filtrerPar === 'task id' ||
+      filtrerPar === 'task title' ||
+      filtrerPar === 'task title' ||
+      filtrerPar === 'vehicules immatriculation' ||
+      filtrerPar === 'assigned to' ||
+      filtrerPar === 'created by' ||
+      filtrerPar === 'model' ||
+      filtrerPar === 'makes' ||
       filtrerPar === 'NOM' ||
       filtrerPar === 'PRENOM' ||
       filtrerPar === 'EMAIL'
@@ -78,7 +91,7 @@ export default function TaskFilterComponent({
     } else if (filtrerPar === 'ROLE') {
       setOptionsType(['ROLE EGALE A']);
       setFilterType('ROLE EGALE A');
-    } else if (filtrerPar === 'STATUS') {
+    } else if (filtrerPar === 'STATUS' || filtrerPar === 'task status') {
       setOptionsType(['STATUS EGALE A']);
       setFilterType('STATUS EGALE A');
     } else if (filtrerPar === 'QUANTITE') {

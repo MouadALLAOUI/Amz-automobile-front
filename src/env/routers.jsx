@@ -9,7 +9,7 @@ import Templates from '../views/Templates';
 import CheckLogin from '../component/CheckLogin';
 import Welcome from '../views/content/welcome';
 import Rapport from '../views/content/Rapport';
-import PrintPdf from '../views/content/pdfs';
+import PrintPdf from '../views/content/printTasks/pdfs';
 import Tasks from '../views/content/tasks/tasks';
 import About from '../views/content/about';
 import NotFoundPage from '../views/notfound';
