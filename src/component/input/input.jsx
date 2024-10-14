@@ -6,24 +6,26 @@ function Input({
   id = 'input',
   type = 'text',
   name = '',
-  isErr= false,
+  value = '',
+  isErr = false,
   placeholder = '',
   className = 'Input',
   disabled = false,
   required = false,
-  onChange = () => {},
+  onChange = () => { },
   IsAIco = false,
   AIcoType = 'class',
   AIco = 'fa-solid fa-abacus',
+  onAIcoClicked = () => { },
 }) {
   const getIconByType = (type, Icon) => {
     switch (type) {
-    case 'image':
-      return <img className="Icon" src={Icon} alt="icon" />;
-    case 'svg':
-      return <Icon className="Icon" />;
-    default:
-      return <i height={30} className={`Icon ${Icon}`}></i>;
+      case 'image':
+        return <img className="Icon" src={Icon} alt="icon" />;
+      case 'svg':
+        return <Icon className="Icon" />;
+      default:
+        return <i height={30} className={`Icon ${Icon}`}></i>;
     }
   };
   return (
@@ -38,6 +40,7 @@ function Input({
           id={id}
           type={type}
           name={name}
+          value={value}
           placeholder={placeholder}
           className={`input ${isErr && 'error'} ${className}`}
           disabled={disabled}
@@ -47,7 +50,7 @@ function Input({
         />
       </div>
       {IsAIco && (
-        <label htmlFor={id} className="Icon-container AIcon">
+        <label htmlFor={id} className="Icon-container AIcon" onClick={onAIcoClicked}>
           {getIconByType(AIcoType, AIco)}
         </label>
       )}

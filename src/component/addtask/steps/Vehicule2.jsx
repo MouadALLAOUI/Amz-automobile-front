@@ -7,9 +7,9 @@ const Vehicule = ({ automobile = {}, setAutomobile = () => {} }) => {
   const [CARS_Makes, setCARS_Makes] = useState([]);
   useEffect(() => {
     axios
-      .get(`${GET_ENV().API_URL}/carmakes`)
+      .get(`${GET_ENV().API_URL}/car-makes`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setCARS_Makes(response.data);
       })
       .catch((err) => {

@@ -45,6 +45,8 @@ export default function LoginView() {
         </div>
         <LoginForm
           isErr={err}
+          email={email}
+          password={password}
           setEmail={setEmail}
           setPassword={setPassword}
           handleSubmit={handleSubmit}

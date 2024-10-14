@@ -3,7 +3,7 @@ import NavLinkBtn from '../navlinkbtn/navlinkbtn';
 import { useSelector } from 'react-redux';
 import { userRoleSelector } from '../../store/userSlice';
 
-export default function NavBar({ setOpenDrawer = () => {} }) {
+export default function NavBar({ setOpenDrawer = () => { } }) {
   const role = useSelector(userRoleSelector);
   return (
     <div className="NavBar">
@@ -25,13 +25,13 @@ export default function NavBar({ setOpenDrawer = () => {} }) {
           >
             <NavLinkBtn Ico="fa-solid fa-tasks" text="TASKS" />
           </NavLink>
-          <NavLink
+          {/* <NavLink
             className="link"
             to="rapport"
             onClick={() => setOpenDrawer(false)}
           >
             <NavLinkBtn Ico="fa-solid fa-chart-line" text="RAPPORT" />
-          </NavLink>
+          </NavLink> */}
           <NavLink
             className="link"
             to="print-pdf"

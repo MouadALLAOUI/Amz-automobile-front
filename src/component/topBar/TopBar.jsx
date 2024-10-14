@@ -1,5 +1,6 @@
 import { IconButton, Input } from '@mui/joy';
 import { isElectron } from '../../env/environnement';
+import { useLocation } from 'react-router-dom';
 
 export default function TopBar({
   isSearchBar = false,
@@ -16,6 +17,8 @@ export default function TopBar({
     window.electron.maximize();
   };
 
+  const location = useLocation();
+
   return (
     <div className="TopBar" id="top-bar">
       {isElectron() ? (
@@ -28,7 +31,7 @@ export default function TopBar({
               <Input
                 className="TopBar-menu-search"
                 startDecorator={<i className="fa fa-home" />}
-                placeholder="link.com/page"
+                placeholder={`AMZ.AUTOMOBILES${location.pathname}`}
                 disabled
               />
             )}
@@ -82,6 +85,7 @@ export default function TopBar({
                 className="TopBar-menu-search"
                 startDecorator={<i className="fa-solid fa-magnifying-glass" />}
                 placeholder="search"
+                disabled
                 sx={{ width: 300, flexGrow: false }}
               />
             )}

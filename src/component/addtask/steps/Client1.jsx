@@ -4,12 +4,12 @@ import {
   Input,
   Grid,
   Switch,
-  Autocomplete,
+  // Autocomplete,
   FormHelperText,
 } from '@mui/joy';
-import axios from 'axios';
+// import axios from 'axios';
 import { useEffect, useState } from 'react';
-import GET_ENV from '../../../env/environnement';
+// import GET_ENV from '../../../env/environnement';
 
 const Client1 = ({ client = {}, setClient = () => {} }) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,20 +25,20 @@ const Client1 = ({ client = {}, setClient = () => {} }) => {
     }
   }, [client.email]);
 
-  const [clientList, setClientList] = useState([]);
+  // const [clientList, setClientList] = useState([]);
   let clientIsCheck = client.isCheckForClient;
-  useEffect(() => {
-    setClient({ ...client, nom: '', email: '', telephone: '' });
-    axios
-      .get(`${GET_ENV().API_URL}/clients`)
-      .then((response) => {
-        setClientList(response.data);
-        // console.log(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [clientIsCheck]);
+  // useEffect(() => {
+  //   setClient({ ...client, nom: '', email: '', telephone: '' });
+  //   axios
+  //     .get(`${GET_ENV().API_URL}/clients`)
+  //     .then((response) => {
+  //       setClientList(response.data);
+  //       // console.log(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [clientIsCheck]);
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
       <Grid xs={12}>
@@ -65,7 +65,7 @@ const Client1 = ({ client = {}, setClient = () => {} }) => {
           />
         </FormControl>
       </Grid>
-      {clientIsCheck && (
+      {/* {clientIsCheck && (
         <Grid xs={12}>
           <FormControl>
             <FormLabel>select the client :</FormLabel>
@@ -88,7 +88,7 @@ const Client1 = ({ client = {}, setClient = () => {} }) => {
             />
           </FormControl>
         </Grid>
-      )}
+      )} */}
       <Grid xs={12}>
         <FormControl>
           <FormLabel>nom de client :</FormLabel>

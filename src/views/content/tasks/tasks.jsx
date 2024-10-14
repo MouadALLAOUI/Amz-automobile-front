@@ -1,70 +1,47 @@
-import { useEffect, useState } from 'react';
-import My_Table from '../../../component/table/table';
-import { Button, IconButton } from '@mui/joy';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import My_Table from "../../../component/table/table";
+import { Button, IconButton } from "@mui/joy";
+import axios from "axios";
 import GET_ENV, {
   FILL_TABLES,
   SET_TABLES_SETTINGS,
-} from '../../../env/environnement';
-import Loader from '../../../component/loader/Loader';
-import ErrorNotif from '../../../component/errornotif/errorNotif';
-import AddTaskMethodes from './methode/addTask';
-import FilterTask from './methode/filterTask';
-import SettingTable from '../../../component/settingRow/settingRow';
+} from "../../../env/environnement";
+import Loader from "../../../component/loader/Loader";
+import ErrorNotif from "../../../component/errornotif/errorNotif";
+import AddTaskComponent from "../../../component/addtask/AddTaskComponent";
+import FilterTask from "./methode/filterTask";
+import SettingTable from "../../../component/settingRow/settingRow";
+import Swal from "sweetalert2";
+import EditTask from "./methode/editTask";
 
 export default function Tasks() {
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [selected, setSelected] = useState([]);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isCheckBoxTable, setIsCheckBoxTable] = useState(false);
   const [isActionColTable, setIsActionColTable] = useState(true);
 
   const [settingOpen, setIsSettingOpen] = useState(false);
-  /*
-  {
-        "id": 1,
-        "nom": "Ellie Walker",
-        "email": "dave.jast@example.net",
-        "telephone": "1-609-280-3949",
-        "vehicule_id": 11,
-        "task_id": 11,
-        "created_at": "2024-06-03T13:52:17.000000Z",
-        "updated_at": "2024-06-03T13:52:17.000000Z",
-        "task": [
-            {
-                "id": 11,
-                "title": "Animi voluptatibus odit quis eum natus asperiores perferendis.",
-                "description": "Et a optio fuga consequatur consequatur dolorem dolore eos. Sequi expedita aut et saepe
-                voluptate omnis. Harum ut facilis quis. Natus nostrum et illum explicabo earum qui et.",
-                "status": "completed",
-                "assigned_to": 46,
-                "created_by": 47,
-                "created_at": "2024-06-03T13:52:13.000000Z",
-                "updated_at": "2024-06-03T13:52:13.000000Z"
-            }
-        ],
-        "vehicule": [
-            {
-                "id": 11,
-                "vehicule": "aut",
-                "immatriculation": "ipsam",
-                "kilometrage": 41535,
-                "model": "asperiores",
-                "created_at": "2024-06-03T13:52:12.000000Z",
-                "updated_at": "2024-06-03T13:52:12.000000Z"
-            }
-        ]
-    },
-  */
   const [settings, setSettings] = useState({
-    client: { nom: true, email: true, telephone: false },
-    task: { title: true, status: true, description: false, assigned_to: false },
+    client: {
+      client_name: true,
+      client_email: false,
+      client_telephone: false,
+    },
+    task: {
+      task_id: true,
+      task_title: true,
+      task_status: true,
+      task_description: false,
+      assigned_to: false,
+      created_by: false,
+    },
     vehicule: {
-      immatriculation: true,
-      vehicule: false,
-      model: false,
+      vehicules_immatriculation: true,
+      vehicules_kilometrage: false,
+      model_id: false,
+      makes_id: false,
     },
   });
 
@@ -83,7 +60,7 @@ export default function Tasks() {
   const [error, setError] = useState({});
 
   // ajouter une tache modal
-  const [openAddTask, setOpenAddTask] = useState(true); // for opening the modal of adding a task
+  const [openAddTask, setOpenAddTask] = useState(false); // for opening the modal of adding a task
   // filter une tache modal
   const [openFilterTask, setOpenFilterTask] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -92,18 +69,19 @@ export default function Tasks() {
 
   useEffect(() => {
     axios
-      .get(`${GET_ENV().API_URL}/clients`)
+      .get(`${GET_ENV().API_URL}/vehicules`)
       .then((response) => {
+        // console.log(response.data);
         setTasks(response.data);
       })
       .catch((err) => {
-        setError({ error: ['we are not able to access server'] });
+        setError({ error: ["we are not able to access server"] });
         setOpenError(true);
         setIsCheckBoxTable(false);
         setIsActionColTable(false);
         setHeadCells([
           {
-            id: 'err',
+            id: "err",
             label: err.message,
             numeric: false,
             disablePadding: true,
@@ -111,7 +89,7 @@ export default function Tasks() {
         ]);
         setRows([{ err: err.message }]);
       });
-  }, [openLoader]);
+  }, [openLoader, error]);
 
   useEffect(() => {
     let wantedCells = SET_TABLES_SETTINGS(settings);
@@ -122,6 +100,111 @@ export default function Tasks() {
     }
   }, [tasks, settings]);
 
+  // const handleDelete = async (rowId) => {
+  //   const url = `${GET_ENV().API_URL}/vehicules/${rowId}`;
+  //   const response = await axios.delete(url);
+  //   Swal.fire({
+  //     title: 'you sure want to delete this task!',
+  //     titleText: 'titleText',
+  //     text: `Deleting row with id: ${rowId}`,
+  //     icon: 'question',
+  //     showDenyButton: true,
+  //     denyButtonText: 'No, I regret',
+  //     confirmButtonText: 'yes, sure',
+  //   }).then((result) => {
+  //     try {
+  //       if (result.isConfirmed) {
+  //         // open the loading page (a spining red circle)
+  //         setOpenLoader(true);
+  //         // the back-end api link
+  //         if (response.data.status === 'success') {
+  //           setOpenLoader(false);  // Hide loader on success
+  //         } else {
+  //           setOpenLoader(false);  // Hide loader if error occurs
+  //           setError(response.data.error); // set error to error message from server
+  //           setOpenError(true);    // Open the error modal
+  //         }
+  //       }
+  //     } catch {
+  //       setOpenLoader(false);
+  //       setError('Une erreur est survenue lors de l\'envoi des données');
+  //     }
+  //     // axios.delete(url).then((response) => {
+  //     //   Swal.fire({
+  //     //     title: 'Data deleted successfully',
+  //     //     text: `${response}`,
+  //     //     icon: 'success',
+  //     //     confirmButtonText: 'leave'
+  //     //   });
+  //     // }).catch((response) => {
+  //     //   setError({ error: response.data.error });
+  //     //   setOpenError(true);
+  //     // );
+  //     // }
+  //   });
+  // };
+
+  const handleDelete = async (rowId) => {
+    // Show the confirmation dialog first
+    Swal.fire({
+      title: "Are you sure you want to delete this task?",
+      text: `Deleting row with ID: ${rowId}`,
+      icon: "question",
+      showDenyButton: true,
+      denyButtonText: "No, I regret",
+      confirmButtonText: "Yes, delete it",
+    }).then(async (result) => {
+      // Only proceed if user confirms
+      if (result.isConfirmed) {
+        try {
+          // Open the loading indicator
+          setOpenLoader(true);
+
+          // Perform the delete API request
+          const url = `${GET_ENV().API_URL}/vehicules/${rowId}`;
+          const response = await axios.delete(url);
+
+          // Check if the API response was successful
+          if (response.data.status === "success") {
+            // Hide the loader and show success message
+            setOpenLoader(false);
+            Swal.fire(
+              "Deleted!",
+              `Row with ID: ${rowId} was successfully deleted.`,
+              "success"
+            );
+          } else {
+            // Hide the loader and show an error message if deletion fails
+            setOpenLoader(false);
+            setError("Error occurred during deletion.");
+            setOpenError(true);
+          }
+        } catch (error) {
+          // Handle any errors during the API call
+          setOpenLoader(false);
+          setError("An error occurred while deleting the task.");
+          setOpenError(true);
+        }
+      } else {
+        // User denied deletion, do nothing
+        Swal.fire("Cancelled", "The task was not deleted", "info");
+      }
+    });
+  };
+  const [editOpen, setEditOpen] = useState(false);
+  const [rowSetting, setRowSetting] = useState({ id: 0, state: "pending" });
+
+  const handleEdit = (rowId, task_status) => {
+    setEditOpen(true);
+    setRowSetting({ ...rowSetting, id: rowId, state: task_status });
+    // Swal.fire({
+    //   title: 'you sure want to edit this task!',
+    //   text: `EDITING row with id: ${rowId}`,
+    //   icon: 'info',
+    //   confirmButtonText: 'Cool'
+    // });
+  };
+
   return (
     <div className="tasks-views">
       <SettingTable
@@ -130,14 +213,21 @@ export default function Tasks() {
         settings={settings}
         handleToggle={handleToggle}
       />
+      <EditTask
+        open={editOpen}
+        setOpen={setEditOpen}
+        rowSetting={rowSetting}
+        setRowSetting={setRowSetting}
+      />
       {openLoader && <Loader />}
       <ErrorNotif open={openError} setOpen={setOpenError} error={error} />
-      <AddTaskMethodes
+      <AddTaskComponent
         setOpenLoader={setOpenLoader}
+        open={openAddTask}
+        setOpen={setOpenAddTask}
         setOpenError={setOpenError}
         setError={setError}
-        openAddTask={openAddTask}
-        setOpenAddTask={setOpenAddTask}
+        handleCancel={() => setOpenAddTask(false)}
       />
       <FilterTask open={openFilterTask} setOpen={setOpenFilterTask} />
       <div className="option-tasks">
@@ -174,14 +264,14 @@ export default function Tasks() {
           headCells={headCells}
           order={order}
           orderBy={orderBy}
-          selected={selected}
           page={page}
           rowsPerPage={rowsPerPage}
           setOrder={setOrder}
           setOrderBy={setOrderBy}
-          setSelected={setSelected}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
+          onDeleteClick={handleDelete}
+          onEditClick={handleEdit}
         />
       </div>
     </div>
