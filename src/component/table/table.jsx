@@ -31,6 +31,8 @@ function My_Table({
   rowsPerPage = 5,
   isCheckBox = true,
   isAction = true,
+  isDeleteBtn = true,
+  isEditBtn = true,
   setOrder = () => { },
   setOrderBy = () => { },
   setSelected = () => { },
@@ -329,17 +331,17 @@ function My_Table({
                           justifyContent: 'center',
                         }}
                       >
-                        <Button size="sm" variant="soft" color="warning" onClick={() => onEditClick(row.id, row.task_status)}>
+                        {isEditBtn && <Button size="sm" variant="soft" color="warning" onClick={() => onEditClick(row.id, row.task_status)}>
                           Edit
-                        </Button>
-                        <Button
+                        </Button>}
+                        {isDeleteBtn && <Button
                           size="sm"
                           variant="solid"
                           color="danger"
                           onClick={() => onDeleteClick(row.id)}
                         >
                           Delete
-                        </Button>
+                        </Button>}
                       </Box>
                     </th>
                   )}

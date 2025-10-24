@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# 🚗 AMZ AUTOMOBILE Front
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🧭 Introduction
 
-## Available Scripts
+**AMZ AUTOMOBILE** is a desktop web application built to help manage mechanical tasks efficiently.
+It allows users to track tasks such as **oil changes**, record **who performed them**, **when**, and for **which vehicle (plate number)**.
 
-In the project directory, you can run:
+This system simplifies workshop management and ensures maintenance history is transparent and organized.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📜 Prologue
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+After my brother — who works as a mechanic — asked for a better way to organize his work,
+I started developing **AMZ AUTOMOBILE** to assist him and other mechanics in managing daily tasks more effectively.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🏗️ Project Structure
 
-### `npm run build`
+```bash
+Amz-automobile-front/
+├── public/
+│    ├── favicon.ico
+│    ├── index.html
+│    ├── manifest.json
+│    └── robots.txt
+├── src/
+│    ├── component/         # All reusable components
+│    ├── env/
+│    │    ├── strings/      # Multilingual support (FR/EN)
+│    │    ├── environnement.jsx
+│    │    └── routers.jsx
+│    ├── media/             # Images and icons
+│    ├── store/
+│    │    ├── store.js
+│    │    └── userSlice.js
+│    ├── styling/           # SCSS, fonts, and style assets
+│    ├── views/
+│    │    ├── content/      # Main client UI
+│    │    ├── Login/        # Login screen
+│    │    ├── notfound.jsx
+│    │    └── Templates.js
+│    └── index.js
+├── .editorconfig
+├── .eslintrc.json
+├── .gitbranch
+├── .gitignore
+├── main.js
+├── package-lock.json
+├── package.json
+├── preload.js
+├── README.md
+└── yarn.lock
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ⚙️ Installation & Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 📦 Requirements
 
-### `npm run eject`
+* `React` v18.3.1+
+* `Node.js`
+* `npm` (or `yarn`)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🚀 Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone the repository:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   git clone https://github.com/MouadALLAOUI/Amz-automobile-front
+   ```
 
-## Learn More
+2. Navigate into the project directory:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```bash
+   cd Amz-automobile-front
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Install dependencies:
 
-### Code Splitting
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+> ✅ Ensure there are no installation errors and that a `node_modules` folder is created in the root directory.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### ▶️ Run the Application
 
-### Making a Progressive Web App
+Run the following commands in **two separate terminals**:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm start
+```
 
-### Advanced Configuration
+```bash
+npm run electron
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This will start the React frontend and the Electron desktop shell.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## ✨ Features
 
-### `npm run build` fails to minify
+* ✅ CRUD operations for tasks
+* 👥 User management
+* 📊 Graph visualization
+* 📋 Dynamic table generation
+* 🧾 Export tasks to PDF
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 🧩 Future Plans
+
+* [ ] Fix bugs and optimize performance
+* [ ] Add user roles and permissions
+* [ ] Create admin dashboard
+* [ ] Deploy online
+* [ ] Enable offline functionality
+* [ ] Add more features based on client needs
+
+---
+
+## 🤝 Contributing
+
+Contributions are always welcome!
+
+1. **Fork** the repository
+2. **Create** your feature branch
+
+   ```bash
+   git checkout -b AmazingFeature
+   ```
+
+3. **Commit** your changes
+
+   ```bash
+   git commit -m "Add some AmazingFeature"
+   ```
+
+4. **Push** your branch
+
+   ```bash
+   git push origin AmazingFeature
+   ```
+
+5. **Open** a Pull Request 🎉
+
+---
+
+## 💡 Acknowledgments
+
+Special thanks to:
+
+* [Stack Overflow](https://stackoverflow.com) — for debugging and problem-solving
+* [ChatGPT](https://chat.openai.com) — for guidance and development support
