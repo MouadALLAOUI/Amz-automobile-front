@@ -3,7 +3,7 @@ import { FormControl, FormLabel, Input, Grid, Autocomplete } from '@mui/joy';
 import axios from 'axios';
 import GET_ENV from '../../../env/environnement';
 
-const Vehicule = ({ automobile = {}, setAutomobile = () => {} }) => {
+const Vehicule = ({ automobile = {}, setAutomobile = () => { } }) => {
   const [CARS_Makes, setCARS_Makes] = useState([]);
   useEffect(() => {
     axios

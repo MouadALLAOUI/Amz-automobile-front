@@ -161,6 +161,8 @@ const AddTaskComponent = ({
         client_telephone: client.telephone,
         vehicules_immatriculation: automobile.immatriculation,
         vehicules_kilometrage: automobile.kilometrage,
+        makes: automobile.vehicule !== null ? automobile.vehicule[`name`] : null,
+        model: automobile.model !== null ? automobile.model[`name`] : null,
         makes_id: automobile.vehicule !== null ? automobile.vehicule[`id`] : null,
         model_id: automobile.model !== null ? automobile.model[`id`] : null,
         task_id: task.id,

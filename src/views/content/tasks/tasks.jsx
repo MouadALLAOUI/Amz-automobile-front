@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useState } from "react";
 import My_Table from "../../../component/table/table";
 import { Button, IconButton } from "@mui/joy";
@@ -9,10 +10,11 @@ import GET_ENV, {
 import Loader from "../../../component/loader/Loader";
 import ErrorNotif from "../../../component/errornotif/errorNotif";
 import AddTaskComponent from "../../../component/addtask/AddTaskComponent";
-import FilterTask from "./methode/filterTask";
+// import FilterTask from "./methode/filterTask";
 import SettingTable from "../../../component/settingRow/settingRow";
 import Swal from "sweetalert2";
 import EditTask from "./methode/editTask";
+import EditTaskComponent from "../../../component/editTask/EditTaskComponent";
 
 export default function Tasks() {
   const [order, setOrder] = useState("asc");
@@ -40,6 +42,8 @@ export default function Tasks() {
     vehicule: {
       vehicules_immatriculation: true,
       vehicules_kilometrage: false,
+      model: true,
+      makes: true,
       model_id: false,
       makes_id: false,
     },
@@ -59,23 +63,31 @@ export default function Tasks() {
   const [openError, setOpenError] = useState(false);
   const [error, setError] = useState({});
 
-  // ajouter une tache modal
-  const [openAddTask, setOpenAddTask] = useState(false); // for opening the modal of adding a task
-  // filter une tache modal
-  const [openFilterTask, setOpenFilterTask] = useState(false);
+  // Add Task Modal state
+  const [openAddTask, setOpenAddTask] = useState(false);
+
+  // Edit Task Status/Options Modal state
+  const [editStatusOpen, setEditStatusOpen] = useState(false);
+  const [rowSetting, setRowSetting] = useState({ id: null, state: "pending" });
+
+  // Edit Full Task Details Modal state
+  const [editFullTaskOpen, setEditFullTaskOpen] = useState(false);
+  // const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(1);
+
   const [tasks, setTasks] = useState([]);
   const [rows, setRows] = useState([]);
   const [headCells, setHeadCells] = useState([]);
 
-  useEffect(() => {
+  // Fetch tasks function
+  const fetchTasks = () => {
     axios
-      .get(`${GET_ENV().API_URL}/vehicules`)
+      .get(`${GET_ENV().API_URL}/vehicules`) // Assuming /vehicules endpoint returns tasks/vehicles
       .then((response) => {
-        // console.log(response.data);
         setTasks(response.data);
       })
       .catch((err) => {
-        setError({ error: ["we are not able to access server"] });
+        setError({ error: ["Failed to access server or fetch tasks."] });
         setOpenError(true);
         setIsCheckBoxTable(false);
         setIsActionColTable(false);
@@ -89,63 +101,28 @@ export default function Tasks() {
         ]);
         setRows([{ err: err.message }]);
       });
-  }, [openLoader, error]);
+  };
 
+  // Initial fetch and refetch on loader close or error change
+  useEffect(() => {
+    fetchTasks();
+  }, [openLoader, error]); // Refetch when loader closes (implies action completed) or error state changes
+
+  // Update table rows/headers when tasks or settings change
   useEffect(() => {
     let wantedCells = SET_TABLES_SETTINGS(settings);
     if (tasks.length > 0) {
       const { newRows, newHeadCell } = FILL_TABLES(tasks, wantedCells);
       setRows(newRows);
       setHeadCells(newHeadCell);
+    } else {
+      // Handle empty tasks state after fetch or filtering
+      setRows([]);
+      // Optionally keep headers or set specific empty state headers
     }
   }, [tasks, settings]);
 
-  // const handleDelete = async (rowId) => {
-  //   const url = `${GET_ENV().API_URL}/vehicules/${rowId}`;
-  //   const response = await axios.delete(url);
-  //   Swal.fire({
-  //     title: 'you sure want to delete this task!',
-  //     titleText: 'titleText',
-  //     text: `Deleting row with id: ${rowId}`,
-  //     icon: 'question',
-  //     showDenyButton: true,
-  //     denyButtonText: 'No, I regret',
-  //     confirmButtonText: 'yes, sure',
-  //   }).then((result) => {
-  //     try {
-  //       if (result.isConfirmed) {
-  //         // open the loading page (a spining red circle)
-  //         setOpenLoader(true);
-  //         // the back-end api link
-  //         if (response.data.status === 'success') {
-  //           setOpenLoader(false);  // Hide loader on success
-  //         } else {
-  //           setOpenLoader(false);  // Hide loader if error occurs
-  //           setError(response.data.error); // set error to error message from server
-  //           setOpenError(true);    // Open the error modal
-  //         }
-  //       }
-  //     } catch {
-  //       setOpenLoader(false);
-  //       setError('Une erreur est survenue lors de l\'envoi des données');
-  //     }
-  //     // axios.delete(url).then((response) => {
-  //     //   Swal.fire({
-  //     //     title: 'Data deleted successfully',
-  //     //     text: `${response}`,
-  //     //     icon: 'success',
-  //     //     confirmButtonText: 'leave'
-  //     //   });
-  //     // }).catch((response) => {
-  //     //   setError({ error: response.data.error });
-  //     //   setOpenError(true);
-  //     // );
-  //     // }
-  //   });
-  // };
-
   const handleDelete = async (rowId) => {
-    // Show the confirmation dialog first
     Swal.fire({
       title: "Are you sure you want to delete this task?",
       text: `Deleting row with ID: ${rowId}`,
@@ -154,82 +131,154 @@ export default function Tasks() {
       denyButtonText: "No, I regret",
       confirmButtonText: "Yes, delete it",
     }).then(async (result) => {
-      // Only proceed if user confirms
       if (result.isConfirmed) {
+        setOpenLoader(true);
         try {
-          // Open the loading indicator
-          setOpenLoader(true);
-
-          // Perform the delete API request
           const url = `${GET_ENV().API_URL}/vehicules/${rowId}`;
           const response = await axios.delete(url);
-
-          // Check if the API response was successful
+          setOpenLoader(false);
           if (response.data.status === "success") {
-            // Hide the loader and show success message
-            setOpenLoader(false);
             Swal.fire(
               "Deleted!",
               `Row with ID: ${rowId} was successfully deleted.`,
               "success"
             );
+            fetchTasks(); // Refetch tasks after successful deletion
           } else {
-            // Hide the loader and show an error message if deletion fails
-            setOpenLoader(false);
-            setError("Error occurred during deletion.");
+            setError({ error: [response.data.error || "Error occurred during deletion."] });
             setOpenError(true);
           }
         } catch (error) {
-          // Handle any errors during the API call
           setOpenLoader(false);
-          setError("An error occurred while deleting the task.");
+          setError({ error: [error.message || "An error occurred while deleting the task."] });
           setOpenError(true);
         }
       } else {
-        // User denied deletion, do nothing
         Swal.fire("Cancelled", "The task was not deleted", "info");
       }
     });
   };
-  const [editOpen, setEditOpen] = useState(false);
-  const [rowSetting, setRowSetting] = useState({ id: 0, state: "pending" });
 
+  // Opens the initial Edit modal (for status or full edit option)
   const handleEdit = (rowId, task_status) => {
-    setEditOpen(true);
-    setRowSetting({ ...rowSetting, id: rowId, state: task_status });
-    // Swal.fire({
-    //   title: 'you sure want to edit this task!',
-    //   text: `EDITING row with id: ${rowId}`,
-    //   icon: 'info',
-    //   confirmButtonText: 'Cool'
-    // });
+    setRowSetting({ id: rowId, state: task_status || "pending" });
+    setEditStatusOpen(true);
+  };
+
+  // Handles opening the full edit component from the EditTask modal
+  const handleOpenFullEdit = (taskId) => {
+    setEditingTaskId(taskId);
+    setEditFullTaskOpen(true);
+    setEditStatusOpen(false); // Close the status/options modal
+  };
+
+  // Handles changing only the task status
+  const handleTaskStatusChange = (setting) => {
+    Swal.fire({
+      title: "Are you sure you want to edit this task status?",
+      text: `Updating status to: ${setting.state}`,
+      icon: "question",
+      showDenyButton: true,
+      denyButtonText: "No, keep it",
+      confirmButtonText: "Yes, change it",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setOpenLoader(true);
+        try {
+          const url = `${GET_ENV().API_URL}/taskstatus`; // Endpoint for status update
+          const data = {
+            id: setting.id,
+            task_status: setting.state,
+          };
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+          const response = await axios.put(url, data, config);
+          setOpenLoader(false);
+          if (response.data.status === "success") {
+            Swal.fire(
+              "Changed!",
+              `Row status with ID: ${setting.id} was successfully changed.`,
+              "success"
+            );
+            setEditStatusOpen(false); // Close the modal after success
+            fetchTasks(); // Refetch tasks to show updated status
+          } else {
+            setError({ error: [response.data.error || "Error occurred during status update."] });
+            setOpenError(true);
+          }
+        } catch (error) {
+          setOpenLoader(false);
+          setError({ error: [error.message || "An error occurred while editing the task status."] });
+          setOpenError(true);
+        }
+      } else {
+        Swal.fire("Cancelled", "The task status was not changed", "info");
+      }
+    });
   };
 
   return (
     <div className="tasks-views">
+      {/* Settings Modal */}
       <SettingTable
         open={settingOpen}
         setOpen={setIsSettingOpen}
         settings={settings}
         handleToggle={handleToggle}
       />
+
+      {/* Edit Status/Options Modal */}
       <EditTask
-        open={editOpen}
-        setOpen={setEditOpen}
-        rowSetting={rowSetting}
-        setRowSetting={setRowSetting}
+        open={editStatusOpen}
+        setOpen={setEditStatusOpen}
+        rowSetting={rowSetting} // Pass current row id and state
+        setRowSetting={setRowSetting} // Allow EditTask to update local state if needed before save
+        onOpenFullEdit={handleOpenFullEdit} // Pass handler to open full edit modal
+        ontaskChangeClick={handleTaskStatusChange} // Pass handler for saving status change
       />
+
+      {/* Full Edit Task Modal */}
+      {editingTaskId && (
+        <EditTaskComponent
+          taskid={editingTaskId} // Pass the ID of the task to edit
+          open={editFullTaskOpen}
+          setOpen={setEditFullTaskOpen} // Allow component to close itself
+          setOpenLoader={setOpenLoader}
+          setOpenError={setOpenError}
+          setError={setError}
+          onSuccessfulEdit={() => {
+            setEditFullTaskOpen(false);
+            fetchTasks(); // Refetch tasks after successful edit
+          }}
+          handleCancel={() => setEditFullTaskOpen(false)} // Simple cancel closes modal
+        />
+      )}
+
+      {/* Loader and Error Notifications */}
       {openLoader && <Loader />}
       <ErrorNotif open={openError} setOpen={setOpenError} error={error} />
+
+      {/* Add Task Modal */}
       <AddTaskComponent
         setOpenLoader={setOpenLoader}
         open={openAddTask}
         setOpen={setOpenAddTask}
         setOpenError={setOpenError}
         setError={setError}
+        onSuccessfulAdd={() => {
+          setOpenAddTask(false);
+          fetchTasks(); // Refetch tasks after successful add
+        }}
         handleCancel={() => setOpenAddTask(false)}
       />
-      <FilterTask open={openFilterTask} setOpen={setOpenFilterTask} />
+
+      {/* Filter Task Modal (Commented out) */}
+      {/* <FilterTask open={openFilterTask} setOpen={setOpenFilterTask} /> */}
+
+      {/* Action Buttons */}
       <div className="option-tasks">
         <div className="button-config">
           <Button
@@ -240,15 +289,9 @@ export default function Tasks() {
           </Button>
         </div>
         <div className="icons-group">
+          {/* Filter Button (Commented out) */}
+          {/* <IconButton variant="plain" onClick={() => setOpenFilterTask(true)}><i className="fa-solid fa-screwdriver-wrench"></i></IconButton> */}
           <IconButton
-            disabled={false}
-            variant="plain"
-            onClick={() => setOpenFilterTask(true)}
-          >
-            <i className="fa-solid fa-screwdriver-wrench"></i>
-          </IconButton>
-          <IconButton
-            disabled={false}
             variant="plain"
             onClick={() => setIsSettingOpen(true)}
           >
@@ -256,7 +299,9 @@ export default function Tasks() {
           </IconButton>
         </div>
       </div>
-      <div className="option-tasks">
+
+      {/* Task Table */}
+      <div className="table-container"> {/* Added a container for potential styling */}
         <My_Table
           isCheckBox={isCheckBoxTable}
           isAction={isActionColTable}
@@ -271,9 +316,10 @@ export default function Tasks() {
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
           onDeleteClick={handleDelete}
-          onEditClick={handleEdit}
+          onEditClick={handleEdit} // This opens the EditTask (status/options) modal
         />
       </div>
     </div>
   );
 }
+

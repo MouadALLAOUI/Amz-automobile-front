@@ -3,7 +3,7 @@ import {
   FormLabel,
   Input,
   Grid,
-  Switch,
+  // Switch,
   // Autocomplete,
   FormHelperText,
 } from '@mui/joy';
@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from 'react';
 // import GET_ENV from '../../../env/environnement';
 
-const Client1 = ({ client = {}, setClient = () => {} }) => {
+const Client1 = ({ client = {}, setClient = () => { } }) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailErr, setClientEmailErr] = useState(''); // the email err of the client
 
@@ -41,7 +41,7 @@ const Client1 = ({ client = {}, setClient = () => {} }) => {
   // }, [clientIsCheck]);
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-      <Grid xs={12}>
+      {/* <Grid xs={12}>
         <FormControl
           orientation="horizontal"
           sx={{
@@ -64,7 +64,7 @@ const Client1 = ({ client = {}, setClient = () => {} }) => {
             }
           />
         </FormControl>
-      </Grid>
+      </Grid> */}
       {/* {clientIsCheck && (
         <Grid xs={12}>
           <FormControl>

@@ -25,51 +25,74 @@ export default function PrintPdf() {
   const [tasksSheet, setTasksSheet] = useState([]);
   const [rows, setRows] = useState([]);
   const [headCells, setHeadCells] = useState([]);
-
-  const [vehicule, setVehicule] = useState([]);
-
+  // {
+  //   "id": 1,
+  //   "entree": "2024-10-15 15:39:00",
+  //   "sortie": null,
+  //   "details": "TEST the car",
+  //   "vehicule_id": 1,
+  //   "task_id": "TASK-001",
+  //   "vehicule": "Alhambra (Seat)",
+  //   "immatriculation": "CAR-REF-2001",
+  //   "kilometrage": "1500",
+  //   "name": "MOUAD",
+  //   "description": null,
+  //   "tps": null,
+  //   "operations_realisees": null,
+  //   "observations": null
+  // }
   const settings = {
     task_sheet: {
+      vehicule: true,
+      immatriculation: true,
+      name: true,
+      kilometrage: true,
       details: true,
       entree: true,
       sortie: true,
+      description: false,
+      tps: false,
+      operations_realisees: false,
+      observations: false,
       vehicule_id: false,
     }
   };
 
-  // const row = [
-  //   { id: 'task1', name2: 1, test: 2 },
-  //   { id: 'task2', name2: 1, test: 2 },
-  //   { id: 'task3', name2: 1, test: 2 },
-  // ];
-  // const headCell = [
-  //   {
-  //     id: 'id',
-  //     numeric: false,
-  //     disablePadding: true,
-  //     label: 'Name',
-  //   },
-  //   {
-  //     id: 'name2',
-  //     numeric: true,
-  //     disablePadding: true,
-  //     label: 'number',
-  //   },
-  //   {
-  //     id: 'test',
-  //     numeric: true,
-  //     disablePadding: true,
-  //     label: 'number 2',
-  //   },
-  // ];
+  /*
+    // const row = [
+    //   { id: 'task1', name2: 1, test: 2 },
+    //   { id: 'task2', name2: 1, test: 2 },
+    //   { id: 'task3', name2: 1, test: 2 },
+    // ];
+    // const headCell = [
+    //   {
+    //     id: 'id',
+    //     numeric: false,
+    //     disablePadding: true,
+    //     label: 'Name',
+    //   },
+    //   {
+    //     id: 'name2',
+    //     numeric: true,
+    //     disablePadding: true,
+    //     label: 'number',
+    //   },
+    //   {
+    //     id: 'test',
+    //     numeric: true,
+    //     disablePadding: true,
+    //     label: 'number 2',
+    //   },
+    // ];
+  */
 
   useEffect(() => {
     axios.get(`${GET_ENV().API_URL}/task-sheets`)
       .then((response) => {
-        // console.log(response.data.tasksheet); #f95
-        // console.log(response.data.vehicule); #f95
+        // console.log(response.data.tasksheet); // #f95
+        // console.log(response.data.vehicule); // #f95
         setTasksSheet(response.data.tasksheet);
-        setVehicule(response.data.vehicule);
+        // setVehicules(response.data.vehicule);
       })
       .catch((err) => {
         setError({ error: ["we are not able to access server"] });
@@ -121,7 +144,7 @@ export default function PrintPdf() {
           <IconButton disabled={false} variant="plain">
             <i className="fa-solid fa-gear"></i>
           </IconButton>
-          <IconButton disabled={false} variant="plain" onClick={setPdfViewOpen}>
+          <IconButton disabled={false} variant="plain" onClick={() => setPdfViewOpen(true)}>
             <i className="fa-solid fa-file-pdf"></i>
           </IconButton>
         </div>
@@ -130,7 +153,7 @@ export default function PrintPdf() {
         <PDF_GENERATOR_CONTAINER
           open={pdfViewOpen}
           setOpen={() => setPdfViewOpen(false)}
-          vehicule={vehicule}
+          vehicules={tasksSheet}
           selected={selected}
         />
         <My_Table
@@ -143,6 +166,7 @@ export default function PrintPdf() {
           selected={selected}
           page={page}
           rowsPerPage={rowsPerPage}
+          isDeleteBtn={false}
           setOrder={setOrder}
           setOrderBy={setOrderBy}
           setSelected={setSelected}
